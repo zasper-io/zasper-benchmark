@@ -2,7 +2,6 @@
 
 ![](/assets/results.png)
 
-# Objective
 The primary goal of this benchmarking exercise is to compare the performance of Zasper against the traditional Jupyter Server. The focus areas for evaluation are:
 
 * CPU Usage
