@@ -21,10 +21,8 @@ A new session is initiated when a user opens a Jupyter notebook.
 
 This session launches a kernel, which handles code execution.
 
-### 2. Communication via WebSocket
-A WebSocket is established between the Jupyter client and the server, allowing real-time, bi-directional communication.
 
-### 3. Kernel Channels
+### 2. Kernel Channels
 The Jupyter kernel communicates with the server over five dedicated channels:
 * stdin – for user inputs.
 * shell – for sending execution requests.
@@ -34,8 +32,13 @@ The Jupyter kernel communicates with the server over five dedicated channels:
 
 📌 For this benchmarking exercise, we focus only on:
 
-* Shell channel – used to send execution requests (e.g., 2+2, print("Hello World!"))
-* IOPub channel – used to receive outputs from the kernel (e.g., 4, Hello World!)
+* Shell channel – used to send execution requests (e.g., `2+2`, `print("Hello World!")`)
+* IOPub channel – used to receive outputs from the kernel (e.g., `4`, `Hello World!`)
+
+### 3. Communication via WebSocket
+A WebSocket is established between the Jupyter client and the server, allowing real-time, bi-directional communication. The client send the messages over the websocket. When the jupyter_server receives this message it puts this message on a `shell channel` over zeromq. This message when received by the kernel  triggers a computation in the kernel. The kernel emits the output on `iopub channel` over zeromq. This message is received by Jupyter server and the output is put on websocket.
+
+![](/assets/kernel_communication.svg)
 
 
 ## Methodology
@@ -46,7 +49,7 @@ The benchmarking setup follows a controlled and repeatable process:
 A session is created and a WebSocket connection is established using a goroutine.
 
 ### 2. Execution Requests
-A stream of kernel_execute_request messages is sent over the shell channel. Each message triggers a computation in the kernel.
+A stream of `execute_request` kernel messages is sent over the websocket.
 
 ### 3. Monitoring & Logging
 System metrics such as CPU usage, memory consumption, and execution throughput are recorded at 10-second intervals. These are visualized for comparison.
@@ -59,9 +62,7 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 ### Key observations:
 
 * CPU Usage: Zasper maintained consistently lower CPU usage during heavy load.
-
 * RAM Usage: Memory consumption was significantly lower for Zasper.
-
 * Throughput: Zasper handled more execution requests per unit of time, indicating better scalability under concurrent workloads.
 
 ## Benefits of Zasper
@@ -72,7 +73,6 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 
 ### For Enterprises
 * Cost Efficiency: Lower resource usage translates to fewer cloud compute instances required.
-
 * Better Scalability: Efficient resource handling allows support for more users and sessions per node.
 
 
