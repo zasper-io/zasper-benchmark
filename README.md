@@ -2,6 +2,14 @@
 
 ![](/assets/results.png)
 
+## System Specifications
+
+* OS : macOS
+* CPU : Apple M4, 10-core CPU
+* RAM: 16GB
+
+# Introduction
+
 The primary goal of this benchmarking exercise is to compare the performance of Zasper against the traditional Jupyter Server. The focus areas for evaluation are:
 
 * CPU Usage
@@ -54,7 +62,6 @@ A stream of `execute_request` kernel messages is sent over the websocket.
 ### 3. Monitoring & Logging
 System metrics such as CPU usage, memory consumption, and execution throughput are recorded at 10-second intervals. These are visualized for comparison.
 
-
 # Results
 
 The graph shows a clear performance difference between Zasper and Jupyter Server across the selected metrics.
@@ -64,6 +71,21 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 * CPU Usage: Zasper maintained consistently lower CPU usage during heavy load.
 * RAM Usage: Memory consumption was significantly lower for Zasper.
 * Throughput: Zasper handled more execution requests per unit of time, indicating better scalability under concurrent workloads.
+
+## Why Zasper Outperforms Jupyter Server
+
+Go is a compiled language with native support for concurrency and multi-core scalability, whereas Python is an interpreted language that primarily runs on a single core. This fundamental difference gives **Zasper**, built in Go, a significant performance advantage over **Jupyter Server**, which is built in Python.
+
+Jupyter Server uses the **Tornado** web server, which is built around Python’s **asyncio** framework for handling asynchronous requests. In contrast, Zasper leverages Go’s **Gorilla** server, which utilizes Go’s lightweight **goroutines** for concurrency. While both are asynchronous in nature, goroutines are much more efficient and cheaper to schedule compared to Python’s event-loop-based coroutines.
+
+In Jupyter Server, submitting a request to the ZeroMQ channels involves packaging an asynchronous function into the asyncio event loop, along with futures and callbacks. The loop must then schedule and manage these functions—an operation that introduces overhead. Zasper, on the other hand, creates goroutines with minimal scheduling cost, making the process significantly faster.
+
+While Python’s asyncio and Go’s goroutines share similar architectural goals, Go's model is much closer to the hardware. It schedules coroutines across multiple CPU threads seamlessly, while Python is limited by the **Global Interpreter Lock (GIL)**, preventing true multi-core parallelism.
+
+When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance or even crashes.
+
+Zasper is designed around the principle of **“Use More to Save More.”** As request volume increases, Zasper’s efficiency becomes more apparent. Its architecture thrives under load, delivering better throughput and stability at scale.
+
 
 ## Benefits of Zasper
 
