@@ -15,17 +15,21 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/joho/godotenv"
+
+	"github.com/zasper-io/bechmark/models"
+	monitor "github.com/zasper-io/bechmark/montoring"
 )
 
 var (
-	wg               sync.WaitGroup
-	benchmarkMutex   sync.Mutex
-	benchmarkResults []BenchmarkData
+	wg sync.WaitGroup
 )
+
+// Store WebSocket connections
+var kernelConnections map[string]models.KernelWebSocketConnection
 
 // Function to send a POST request asynchronously
 func startKernelSession(
-	url string, wsURL string, payload SessionPayload, messageChannel chan string,
+	url string, wsURL string, payload models.SessionPayload, messageChannel chan string,
 	token string, xsrfToken string, numRequest int,
 ) int {
 	payload.Name = fmt.Sprintf("Untitled-%d.ipynb", numRequest)
@@ -65,7 +69,7 @@ func startKernelSession(
 	log.Printf("Response Status: %s", resp.Status)
 	log.Printf("Response Body: %s", string(responseBody))
 
-	var response Response
+	var response models.Response
 	err = json.Unmarshal(responseBody, &response)
 	if err != nil {
 		log.Printf("Error unmarshaling response: %v", err)
@@ -96,7 +100,7 @@ func addKernelConnectionWorker(kernelID string, sessionID string, wsURL string, 
 		log.Fatalf("Failed to connect to WebSocket: %v", err)
 	}
 
-	kernelConnections[kernelID] = KernelWebSocketConnection{
+	kernelConnections[kernelID] = models.KernelWebSocketConnection{
 		Conn:     conn,
 		KernelId: kernelID,
 	}
@@ -127,7 +131,7 @@ func addKernelConnectionWorkerSlow(kernelID string, sessionID string, wsURL stri
 		log.Fatalf("Failed to connect to WebSocket: %v", err)
 	}
 
-	kernelConnections[kernelID] = KernelWebSocketConnection{
+	kernelConnections[kernelID] = models.KernelWebSocketConnection{
 		Conn:     conn,
 		KernelId: kernelID,
 	}
@@ -149,9 +153,9 @@ func addKernelConnectionWorkerSlow(kernelID string, sessionID string, wsURL stri
 
 // Function to send kernel_info_request to the WebSocket connection
 func sendKernelInfoRequest(conn *websocket.Conn, kernelID string, sessionID string) {
-	msg := Message{
+	msg := models.Message{
 		Channel: "shell",
-		Content: Content{
+		Content: models.Content{
 			Silent:          false,
 			StoreHistory:    true,
 			UserExpressions: map[string]interface{}{},
@@ -159,7 +163,7 @@ func sendKernelInfoRequest(conn *websocket.Conn, kernelID string, sessionID stri
 			StopOnError:     true,
 			Code:            "2+2",
 		},
-		Header: Header{
+		Header: models.Header{
 			Date:     time.Now().Format(time.RFC3339),
 			MsgID:    uuid.New().String(),
 			MsgType:  "execute_request",
@@ -167,13 +171,13 @@ func sendKernelInfoRequest(conn *websocket.Conn, kernelID string, sessionID stri
 			Username: "prasunanand",
 			Version:  "5.2",
 		},
-		Metadata: Metadata{
+		Metadata: models.Metadata{
 			DeletedCells: []interface{}{},
 			RecordTiming: false,
 			CellID:       uuid.New().String(),
 			Trusted:      true,
 		},
-		ParentHeader: Header{},
+		ParentHeader: models.Header{},
 	}
 
 	err := conn.WriteJSON(msg)
@@ -194,7 +198,7 @@ func listenForMessages(conn *websocket.Conn) {
 
 		switch messageType {
 		case websocket.TextMessage:
-			var jsonMsg MessageReceived
+			var jsonMsg models.MessageReceived
 			if err := json.Unmarshal(msg, &jsonMsg); err != nil {
 				log.Printf("Received non-JSON message: %s", string(msg))
 			} else {
@@ -210,7 +214,7 @@ func listenForMessages(conn *websocket.Conn) {
 
 // Function to run the benchmark and monitor resources
 func benchmark(
-	url string, wsURL string, payload SessionPayload, messageChannel chan string,
+	url string, wsURL string, payload models.SessionPayload, messageChannel chan string,
 	token string, xsrfToken string, numRequests int, resultFile string,
 ) {
 	for i := 0; i < numRequests; i++ {
@@ -224,7 +228,7 @@ func benchmark(
 }
 
 // Benchmark against Zasper
-func benchmarkZasper(payload SessionPayload, messageChannel chan string) {
+func benchmarkZasper(payload models.SessionPayload, messageChannel chan string) {
 	zasperURL := "http://localhost:8048/api/sessions"
 	wsURL := "ws://localhost:8048/api/kernels/%s/channels?session_id=%s"
 
@@ -232,7 +236,7 @@ func benchmarkZasper(payload SessionPayload, messageChannel chan string) {
 }
 
 // Benchmark against Jupyter
-func benchmarkJupyter(payload SessionPayload, messageChannel chan string) {
+func benchmarkJupyter(payload models.SessionPayload, messageChannel chan string) {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -248,23 +252,23 @@ func benchmarkJupyter(payload SessionPayload, messageChannel chan string) {
 
 // Entry point
 func main() {
-	benchmarkResults = make([]BenchmarkData, 0)
-	kernelConnections = make(map[string]KernelWebSocketConnection)
+	monitor.InitializeBenchmarkResults()
+	kernelConnections = make(map[string]models.KernelWebSocketConnection)
 	messageChannel := make(chan string)
 
-	payload := SessionPayload{
+	payload := models.SessionPayload{
 		Type: "notebook",
-		Kernel: Kernel{
+		Kernel: models.Kernel{
 			Name: "python3",
 		},
 	}
 
 	// Parse CLI flag
-	target := flag.String("target", "jupyter", "Specify which backend to benchmark: 'jupyter' or 'zasper'")
+	target := flag.String("target", "zasper", "Specify which backend to benchmark: 'jupyter' or 'zasper'")
 	flag.Parse()
 
-	go monitorProcessByPID(42194)
-	go writeBenchmarkResultsPeriodically("benchmark_results_new.json", 15*time.Second)
+	go monitor.MonitorProcessByPID(42194)
+	go monitor.WriteBenchmarkResultsPeriodically("benchmark_results_new.json", 15*time.Second)
 
 	// Choose which backend to benchmark
 	switch *target {
