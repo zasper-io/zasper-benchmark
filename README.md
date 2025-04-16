@@ -62,6 +62,46 @@ A stream of `execute_request` kernel messages is sent over the websocket.
 ### 3. Monitoring & Logging
 System metrics such as CPU usage, memory consumption, and execution throughput are recorded at 10-second intervals. These are visualized for comparison.
 
+## Steps to run
+
+* Setting up the benchmark code
+```
+git clone https://github.com/zasper-io/zasper-benchmark
+cd zasper-benchmark
+# Install go dependencides
+go mod tidy
+# Install Python dependencies
+pip install -r requirements.txt
+```
+
+
+* Collecting data for zasper
+
+1. Start Zasper
+
+2. Start the monitoring code
+```
+go run .
+```
+The program writes the output to `benchmark_results_zasper.json`
+
+* Collecting data for Jupyterlab
+
+1. Start JupyterLab.
+2. You need to get `api_token` and `xsrf_token` and paste it in the `.env` file.
+3. Start the monitoring code
+```
+go run .
+```
+The program writes the output to `benchmark_results_jupyterlab.json`
+
+* Visualize the data
+
+```
+python visualize.py
+```
+
+
 # Results
 
 The graph shows a clear performance difference between Zasper and Jupyter Server across the selected metrics.
