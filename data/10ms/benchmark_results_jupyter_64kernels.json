@@ -1,0 +1,128 @@
+[
+  {
+    "timestamp": "2025-04-27T12:16:25+05:30",
+    "cpu_usage": 1.0795704166433122,
+    "memory_usage_mb": 86.15625,
+    "messages_sent_count": 0,
+    "messages_received_count": 0,
+    "message_sent_throughput": 0,
+    "message_received_throughput": 0
+  },
+  {
+    "timestamp": "2025-04-27T12:16:30+05:30",
+    "cpu_usage": 2.5781555855724747,
+    "memory_usage_mb": 118.25,
+    "messages_sent_count": 0,
+    "messages_received_count": 187,
+    "message_sent_throughput": 0,
+    "message_received_throughput": 37.26113210529158
+  },
+  {
+    "timestamp": "2025-04-27T12:16:35+05:30",
+    "cpu_usage": 2.475362252590322,
+    "memory_usage_mb": 119.5625,
+    "messages_sent_count": 298,
+    "messages_received_count": 187,
+    "message_sent_throughput": 59.79106112941488,
+    "message_received_throughput": 0
+  },
+  {
+    "timestamp": "2025-04-27T12:16:40+05:30",
+    "cpu_usage": 8.609697850518565,
+    "memory_usage_mb": 975.234375,
+    "messages_sent_count": 32329,
+    "messages_received_count": 5983,
+    "message_sent_throughput": 6393.662880006935,
+    "message_received_throughput": 1156.9314118360398
+  },
+  {
+    "timestamp": "2025-04-27T12:16:45+05:30",
+    "cpu_usage": 13.937664261180679,
+    "memory_usage_mb": 1269.5625,
+    "messages_sent_count": 64444,
+    "messages_received_count": 10928,
+    "message_sent_throughput": 6408.400328540955,
+    "message_received_throughput": 986.7519733655621
+  },
+  {
+    "timestamp": "2025-04-27T12:16:50+05:30",
+    "cpu_usage": 18.557670907815684,
+    "memory_usage_mb": 1148.265625,
+    "messages_sent_count": 96508,
+    "messages_received_count": 16555,
+    "message_sent_throughput": 6397.397359984371,
+    "message_received_throughput": 1122.6969481235049
+  },
+  {
+    "timestamp": "2025-04-27T12:16:55+05:30",
+    "cpu_usage": 21.666192604430275,
+    "memory_usage_mb": 1069.234375,
+    "messages_sent_count": 123724,
+    "messages_received_count": 19758,
+    "message_sent_throughput": 5432.889372363165,
+    "message_received_throughput": 639.3865615696362
+  },
+  {
+    "timestamp": "2025-04-27T12:17:00+05:30",
+    "cpu_usage": 24.740826333439475,
+    "memory_usage_mb": 1051.453125,
+    "messages_sent_count": 150080,
+    "messages_received_count": 21175,
+    "message_sent_throughput": 5261.800057287658,
+    "message_received_throughput": 282.89462290091865
+  },
+  {
+    "timestamp": "2025-04-27T12:17:05+05:30",
+    "cpu_usage": 27.530598234875438,
+    "memory_usage_mb": 843.640625,
+    "messages_sent_count": 180959,
+    "messages_received_count": 21388,
+    "message_sent_throughput": 6165.76449811802,
+    "message_received_throughput": 42.53077619414937
+  },
+  {
+    "timestamp": "2025-04-27T12:17:10+05:30",
+    "cpu_usage": 29.355379945366032,
+    "memory_usage_mb": 815.921875,
+    "messages_sent_count": 211887,
+    "messages_received_count": 21467,
+    "message_sent_throughput": 6174.174381598134,
+    "message_received_throughput": 15.770815317713804
+  },
+  {
+    "timestamp": "2025-04-27T12:17:15+05:30",
+    "cpu_usage": 31.84682993307442,
+    "memory_usage_mb": 784.28125,
+    "messages_sent_count": 242579,
+    "messages_received_count": 21507,
+    "message_sent_throughput": 6127.374658164359,
+    "message_received_throughput": 7.985630989397054
+  },
+  {
+    "timestamp": "2025-04-27T12:17:20+05:30",
+    "cpu_usage": 33.35246850512806,
+    "memory_usage_mb": 747.1875,
+    "messages_sent_count": 274387,
+    "messages_received_count": 21547,
+    "message_sent_throughput": 6350.220246562654,
+    "message_received_throughput": 7.985689444872553
+  },
+  {
+    "timestamp": "2025-04-27T12:17:25+05:30",
+    "cpu_usage": 34.97656829356562,
+    "memory_usage_mb": 713.328125,
+    "messages_sent_count": 306451,
+    "messages_received_count": 21627,
+    "message_sent_throughput": 6400.401036864729,
+    "message_received_throughput": 15.96906446323535
+  },
+  {
+    "timestamp": "2025-04-27T12:17:30+05:30",
+    "cpu_usage": 36.81867883289177,
+    "memory_usage_mb": 748.171875,
+    "messages_sent_count": 338515,
+    "messages_received_count": 22547,
+    "message_sent_throughput": 6401.821783419763,
+    "message_received_throughput": 183.6850062607966
+  }
+]
