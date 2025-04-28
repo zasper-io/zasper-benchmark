@@ -328,7 +328,7 @@ Zasper is designed around the principle of **“Use More to Save More.”** As r
 This benchmarking study highlights Zasper's performance advantages over the traditional Jupyter Server. Whether for individual developers or large-scale enterprise deployments, Zasper demonstrates meaningful improvements in resource efficiency and execution throughput, making it a promising alternative for interactive computing environments.
 
 
-# Thanks to Jupyter Community
+# 🙏 Thanks to Jupyter Community
 
 Zasper would not exist without the incredible work of the Jupyter community. Zasper uses the Jupyter wire protocol and draws inspiration from its architecture. Deep thanks to all Jupyter contributors for laying the groundwork. Data Science Notebooks would not have existed without them.
 
