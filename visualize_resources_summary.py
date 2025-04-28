@@ -23,6 +23,10 @@ avg_mems_jupyter = []
 max_cpus_jupyter = []
 max_mems_jupyter = []
 
+def label_points(ax, x, y, color):
+    for xi, yi in zip(x, y):
+        ax.annotate(f"{yi:.1f}", (xi, yi), textcoords="offset points", xytext=(0,5), ha='center', fontsize=7, color=color)
+
 # Define helper to add annotation
 def add_note(ax, text, position='upper right'):
     positions = {
@@ -76,40 +80,48 @@ fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(10, 10))
 # 1. CPU Usage
 ax1.plot(kernel_counts, avg_cpus_zasper, label="Zasper CPU Usage", marker='o', color='#583BD8')
 ax1.plot(kernel_counts, avg_cpus_jupyter, label="Jupyter Server CPU Usage", marker='o', color='#E46E2E')
-ax1.set_title('Zasper v/s Jupyter: Average CPU Usage (%)')
+label_points(ax1, kernel_counts, avg_cpus_zasper, '#583BD8')
+label_points(ax1, kernel_counts, avg_cpus_jupyter, '#E46E2E')
+ax1.set_title('Zasper v/s Jupyter Server: Average CPU Usage (%)')
 ax1.set_xlabel('Number of Kernels')
 ax1.set_ylabel('CPU Usage (%)')
 ax1.legend()
 ax1.grid(True)
-add_note(ax1, "Lower CPU usage is better", position='center right')
+add_note(ax1, "Lower CPU usage is better", position='upper left')
 
 ax2.plot(kernel_counts, max_cpus_zasper, label="Zasper CPU Usage", marker='o', color='#583BD8')
 ax2.plot(kernel_counts, max_cpus_jupyter, label="Jupyter Server CPU Usage", marker='o', color='#E46E2E')
-ax2.set_title('Zasper v/s Jupyter: Max CPU Usage (%)')
+label_points(ax2, kernel_counts, max_cpus_zasper, '#583BD8')
+label_points(ax2, kernel_counts, max_cpus_jupyter, '#E46E2E')
+ax2.set_title('Zasper v/s Jupyter Server: Max CPU Usage (%)')
 ax2.set_xlabel('Number of Kernels')
 ax2.set_ylabel('CPU Usage (%)')
 ax2.legend()
 ax2.grid(True)
-add_note(ax2, "Lower CPU usage is better", position='center right')
+add_note(ax2, "Lower CPU usage is better", position='upper left')
 
 # 2. RAM Usage
 ax3.plot(kernel_counts, avg_mems_zasper, label="Zasper Memory Usage", marker='o', color='#583BD8')
 ax3.plot(kernel_counts, avg_mems_jupyter, label="Jupyter Server Memory Usage", marker='o', color='#E46E2E')
-ax3.set_title('Zasper v/s Jupyter: Average Memory Usage (MB)')
+label_points(ax3, kernel_counts, avg_mems_zasper, '#583BD8')
+label_points(ax3, kernel_counts, avg_mems_jupyter, '#E46E2E')
+ax3.set_title('Zasper v/s Jupyter Server: Average Memory Usage (MB)')
 ax3.set_xlabel('Number of Kernels')
 ax3.set_ylabel('Memory (MB)')
 ax3.legend()
 ax3.grid(True)
-add_note(ax3, "Lower RAM usage is better", position='center right')
+add_note(ax3, "Lower RAM usage is better", position='upper left')
 
 ax4.plot(kernel_counts, max_mems_zasper, label="Zasper Memory Usage", marker='o', color='#583BD8')
 ax4.plot(kernel_counts, max_mems_jupyter, label="Jupyter Server Memory Usage", marker='o', color='#E46E2E')
-ax4.set_title('Zasper v/s Jupyter: Max Memory Usage (MB)')
+label_points(ax4, kernel_counts, max_mems_zasper, '#583BD8')
+label_points(ax4, kernel_counts, max_mems_jupyter, '#E46E2E')
+ax4.set_title('Zasper v/s Jupyter Server: Max Memory Usage (MB)')
 ax4.set_xlabel('Number of Kernels')
 ax4.set_ylabel('Memory (MB)')
-ax4.legend()
 ax4.grid(True)
-add_note(ax4, "Lower RAM usage is better", position='center right')
+add_note(ax4, "Lower RAM usage is better", position='center left')
+ax4.legend()
 
 
 fig.text(
