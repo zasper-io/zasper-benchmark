@@ -154,6 +154,10 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 
 ![](/plots/100ms/benchmark_result_2kernels.png)
 
+Lower CPU uasage and RAM usage is better.
+Higher Message sent and  Message receievd is better
+Higher Message sent per second and Message received per second  is better.
+
 ### 4 kernels | 10 RPS per kernel
 
 ![](/plots/100ms/benchmark_result_4kernels.png)
@@ -288,10 +292,14 @@ Zasper is designed around the principle of **“Use More to Save More.”** As r
 * Cost Efficiency: Lower resource usage translates to fewer cloud compute instances required.
 * Better Scalability: Efficient resource handling allows support for more users and sessions per node.
 
-
 ## Conclusion
 
 This benchmarking study highlights Zasper's performance advantages over the traditional Jupyter Server. Whether for individual developers or large-scale enterprise deployments, Zasper demonstrates meaningful improvements in resource efficiency and execution throughput, making it a promising alternative for interactive computing environments.
+
+
+# Thanks to Jupyter Community
+
+Zasper would not exist without the incredible work of the Jupyter community. Zasper uses the Jupyter wire protocol and draws inspiration from its architecture. Deep thanks to all Jupyter contributors for laying the groundwork. Data Science Notebooks would not have existed without them.
 
 # Copyright
 
