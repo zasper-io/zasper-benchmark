@@ -2,24 +2,13 @@
 
 ![](/assets/banner.png)
 
-## System Specifications
+Zasper is an IDE designed from the ground up to support massive concurrency. It provides a minimal memory footprint, exceptional speed, and the ability to handle numerous concurrent connections.
 
-* OS : macOS
-* CPU : Apple M4, 10-core CPU
-* RAM: 16GB
+It's perfectly suited for running REPL-style data applications, with Jupyter notebooks being one example.
 
-Note: A typical IPython kernel consumes around 80 MB of RAM on avaerage.
+[Project](https://github.com/zasper-io/zasper)
 
-![](/assets/idle_ram.png)
-
-(RAM usage on M4 Mac mini)
-
-On my M4 Mac mini, I can see that leftover RAM is around 9 GB , hence the number of kernels that can fit on my machine is 9GB/80MB = 112 ~= 100 Jupyter kernels.
-
-On an M3 Macbook Air which has just 8GB RAM, the leftover RAM tends to be around 1GB RAM , so we can fit ~10 Ipython kernels running on that machine.
-
-Hence, if you want to run the benchmarks make sure that you have enough RAM for the kernels, else you might end up with results that won't make sense.
-
+![](/assets/summary_resources.png)
 
 # Introduction
 
@@ -97,13 +86,18 @@ NUM_KERNELS=64
 TARGET=jupyter
 PID=17656
 ```
-`DELAY` is the time duration between two subsequent message requests to a kernel. 
-`NUM_KERNELS` : Number of kernel connections you want to create.
-`TAEGET`: Define whether you are measuring the performace of jupyter or zasper.
-`PID`: the process id of `jupyterlab` or `zasper` once you start the process.
-`TOKEN`: the `api_token` of jupyterlab session.
-`XSRF_TOKEN`: collect it via the browser. In Jupyterlab ui Open developer tools > Application . Copy the `xsrf_token`.
 
+`DELAY` is the time duration between two subsequent message requests to a kernel. 
+
+`NUM_KERNELS` : Number of kernel connections you want to create.
+
+`TARGET`: Define whether you are measuring the performace of jupyter or zasper.
+
+`PID`: the process id of `jupyterlab` or `zasper` once you start the process.
+
+`TOKEN`: the `api_token` of jupyterlab session.
+
+`XSRF_TOKEN`: collect it via the browser. In Jupyterlab ui Open developer tools > Application . Copy the `xsrf_token`.
 
 
 * Collecting data for zasper
@@ -162,6 +156,25 @@ python3 visualize.py --delay=10 --n=64
 ```
 python3 visualize_resources_summary.py --delay=10
 ```
+
+
+## System Specifications
+
+* OS : macOS
+* CPU : Apple M4, 10-core CPU
+* RAM: 16GB
+
+Note: A typical IPython kernel consumes around 80 MB of RAM on avaerage.
+
+![](/assets/idle_ram.png)
+
+(RAM usage on M4 Mac mini)
+
+On my M4 Mac mini, I can see that leftover RAM is around 9 GB , hence the number of kernels that can fit on my machine is 9GB/80MB = 112 ~= 100 Jupyter kernels.
+
+On an M3 Macbook Air which has just 8GB RAM, the leftover RAM tends to be around 1GB RAM , so we can fit ~10 Ipython kernels running on that machine.
+
+Hence, if you want to run the benchmarks make sure that you have enough RAM for the kernels, else you might end up with results that won't make sense.
 
 # Results
 
@@ -310,7 +323,7 @@ Zasper is designed around the principle of **“Use More to Save More.”** As r
 * Cost Efficiency: Lower resource usage translates to fewer cloud compute instances required.
 * Better Scalability: Efficient resource handling allows support for more users and sessions per node.
 
-## Conclusion
+# Conclusion
 
 This benchmarking study highlights Zasper's performance advantages over the traditional Jupyter Server. Whether for individual developers or large-scale enterprise deployments, Zasper demonstrates meaningful improvements in resource efficiency and execution throughput, making it a promising alternative for interactive computing environments.
 
@@ -318,6 +331,11 @@ This benchmarking study highlights Zasper's performance advantages over the trad
 # Thanks to Jupyter Community
 
 Zasper would not exist without the incredible work of the Jupyter community. Zasper uses the Jupyter wire protocol and draws inspiration from its architecture. Deep thanks to all Jupyter contributors for laying the groundwork. Data Science Notebooks would not have existed without them.
+
+# 🤞 Support Zasper
+
+If you like Zasper and want to support me in my mission, please consider [sponsoring me on GitHub](https://github.com/sponsors/prasunanand).
+
 
 # Copyright
 
