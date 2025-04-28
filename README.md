@@ -1,7 +1,6 @@
 # Benchmarking Zasper v/s Jupyter Server
 
-![](/assets/results.png)
-(JupyterLab is running 2 Ipython kernels whereas Zasper is running 20 Ipython kernels. Hence Zasper consumes more CPU than Jupyter server at `t=0`)
+![](/assets/banner.png)
 
 ## System Specifications
 
