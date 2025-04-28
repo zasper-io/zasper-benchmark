@@ -10,6 +10,16 @@ It's perfectly suited for running REPL-style data applications, with Jupyter not
 
 ![](/assets/summary_resources.png)
 
+How is Zasper better than JupyterLab ?
+
+* Upto 5X Lesser CPU usage 
+* Upto 300X Lesser RAM 
+* Higher throughput
+* Lower latency
+* Highly resilient under very high loads
+
+Note: Jupyter Server powers Jupyterlab. Hence, I use the term interchangeably.
+
 # Introduction
 
 The primary goal of this benchmarking exercise is to compare the performance of Zasper against the traditional Jupyter Server. The focus areas for evaluation are:
