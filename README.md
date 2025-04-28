@@ -88,6 +88,22 @@ go mod tidy
 # Install Python dependencies
 pip install -r requirements.txt
 ```
+* Setting environment variables
+```
+DELAY=10
+TOKEN=0f246b68d418b3eeeaee4f2432b42927aa2458a278523114
+XSRF_TOKEN=2|42679dac|baa53312a6f622e92be800d4bf32b02c|1743152726
+NUM_KERNELS=64
+TARGET=jupyter
+PID=17656
+```
+`DELAY` is the time duration between two subsequent message requests to a kernel. 
+`NUM_KERNELS` : Number of kernel connections you want to create.
+`TAEGET`: Define whether you are measuring the performace of jupyter or zasper.
+`PID`: the process id of `jupyterlab` or `zasper` once you start the process.
+`TOKEN`: the `api_token` of jupyterlab session.
+`XSRF_TOKEN`: collect it via the browser. In Jupyterlab ui Open developer tools > Application . Copy the `xsrf_token`.
+
 
 
 * Collecting data for zasper
@@ -141,9 +157,11 @@ The program writes the output to `benchmark_results_jupyterlab.json`
 * Visualize the data
 
 ```
-python visualize.py
+python3 visualize.py --delay=10 --n=64
 ```
-
+```
+python3 visualize_resources_summary.py --delay=10
+```
 
 # Results
 
@@ -177,13 +195,14 @@ Higher Message sent per second and Message received per second  is better.
 
 ![](/plots/100ms/benchmark_result_64kernels.png)
 
-Note the messages received throughput starts to drop here.
+Note the messages received throughput starts to drop here. A few kernels get disconnect for JupyterLab.
 
 ### 100 kernels | 10 RPS per kernel
 
 ![](/plots/100ms/benchmark_result_100kernels.png)
 
 Note the messages received throughput drops to 0.
+All Jupyter kernels connections crash at this point.
 
 ### Resource Usage summary | 10 RPS per kernel
 ![](/plots/100ms/summary_resources.png)

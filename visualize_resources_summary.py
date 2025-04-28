@@ -23,6 +23,25 @@ avg_mems_jupyter = []
 max_cpus_jupyter = []
 max_mems_jupyter = []
 
+# Define helper to add annotation
+def add_note(ax, text, position='upper right'):
+    positions = {
+        'upper right': dict(x=0.95, y=0.95, ha='right', va='top'),
+        'upper left': dict(x=0.05, y=0.95, ha='left', va='top'),
+        'center': dict(x=0.5, y=0.5, ha='center', va='center'),
+        'center left': dict(x=0.05, y=0.5, ha='left', va='center'),
+        'center right': dict(x=0.95, y=0.5, ha='right', va='center'),
+        'lower right': dict(x=0.95, y=0.05, ha='right', va='bottom'),
+        'lower left': dict(x=0.05, y=0.05, ha='left', va='bottom'),
+    }
+    ax.text(
+        s=text,
+        transform=ax.transAxes,
+        fontsize=9,
+        bbox=dict(facecolor='white', edgecolor='black', boxstyle='round,pad=0.3'),
+        **positions[position]
+    )
+
 # Helper function to compute averages
 def compute_averages(data):
     cpu = [entry['cpu_usage'] for entry in data]
@@ -62,6 +81,7 @@ ax1.set_xlabel('Number of Kernels')
 ax1.set_ylabel('CPU Usage (%)')
 ax1.legend()
 ax1.grid(True)
+add_note(ax1, "Lower CPU usage is better", position='center right')
 
 ax2.plot(kernel_counts, max_cpus_zasper, label="Zasper CPU Usage", marker='o', color='#583BD8')
 ax2.plot(kernel_counts, max_cpus_jupyter, label="Jupyter Server CPU Usage", marker='o', color='#E46E2E')
@@ -70,6 +90,7 @@ ax2.set_xlabel('Number of Kernels')
 ax2.set_ylabel('CPU Usage (%)')
 ax2.legend()
 ax2.grid(True)
+add_note(ax2, "Lower CPU usage is better", position='center right')
 
 # 2. RAM Usage
 ax3.plot(kernel_counts, avg_mems_zasper, label="Zasper Memory Usage", marker='o', color='#583BD8')
@@ -79,6 +100,7 @@ ax3.set_xlabel('Number of Kernels')
 ax3.set_ylabel('Memory (MB)')
 ax3.legend()
 ax3.grid(True)
+add_note(ax3, "Lower RAM usage is better", position='center right')
 
 ax4.plot(kernel_counts, max_mems_zasper, label="Zasper Memory Usage", marker='o', color='#583BD8')
 ax4.plot(kernel_counts, max_mems_jupyter, label="Jupyter Server Memory Usage", marker='o', color='#E46E2E')
@@ -87,8 +109,19 @@ ax4.set_xlabel('Number of Kernels')
 ax4.set_ylabel('Memory (MB)')
 ax4.legend()
 ax4.grid(True)
+add_note(ax4, "Lower RAM usage is better", position='center right')
 
 
-plt.tight_layout()
+fig.text(
+    0.5, 0.02,
+    "* Lower CPU and RAM usage indicates better performance.",
+    ha='center',
+    fontsize=10,
+    bbox=dict(facecolor='white', edgecolor='gray', boxstyle='round,pad=0.4')
+)
+
+# Show the plot
+# plt.tight_layout()
+plt.tight_layout(rect=[0, 0.05, 1, 1])
 plt.savefig(f"plots/{delay}ms/summary_resources.png")
 # plt.show()
