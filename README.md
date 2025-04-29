@@ -281,16 +281,35 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 * For (100kernels at 10RPS) Jupyter server loose all kernel connections. Message received throughput falls to 0. Zeromq message queues get overloaded
 * For (64 kernels at 100RPS) both Zasper and Jupyter server loose all kernel connections. At this python the Jupyter kernels get overwhelmed and zeromq message queues get overloaded.
 
-### Explaining the crash
+## Explaining the crash
 
-* Both Zasper and Jupyter Server eventually crash i.e. loose all kernel connectins when zeromq message queues are full. Zasper handler higher loads because of efficiency. Under higher loads for Zasper, Jupyter(Ipython) kernels are unable to process the kernel `execute_request` messages too fast and hence the Zeromq message queue, leading to crash.
-* Jupyter Server crashes early because of message queues filling up faster as kernel `execute_reply` messages are not consumed from zeromq queues fast enough. 
-* This was expected as Tornado coroutines run on a single core and Python is not built for scaling.
-* So, whenever you have Memory and CPU constraints, JupyterLab is highly likely to crash because zeromq, Jupyter server and JupyterLab will all compete for memory and CPU, and the zmq queues will fill up sooner.
+### Zasper crash
 
 
-**Note that when you are running a Jupyterlab session on the cloud and JupyterLab session completely hangs and becomes unresponsive, this is what is happening.**
+*  Zasper crashed under very high loads compared to Jupyter Server.
+* At 32 kernels, 100 RPS per kernel, the through drops but kernel connections are not lost.
+* At (64 kernels, 100RPS per kernel), the zeromq message queue fills up
+as the **Jupyter kernel** doesnt consume the messages fast and the queue fills up completely, leading to lost kernel connections.
 
+```
+{"level":"info","time":1745735833,"message":"Error writing message: write tcp [::1]:8048->[::1]:51161: write: no buffer space available"}
+{"level":"info","time":1745735834,"message":"Error writing message: write tcp [::1]:8048->[::1]:50991: write: no buffer space available"}
+{"level":"error","error":"writev tcp 127.0.0.1:51485->127.0.0.1:5679: writev: no buffer space available","time":1745735834,"message":"failed to send message"}
+{"level":"error","error":"writev tcp 127.0.0.1:51136->127.0.0.1:5647: writev: no buffer space available","time":1745735834,"message":"failed to send message"}
+{"level":"error","error":"writev tcp 127.0.0.1:51024->127.0.0.1:5230: writev: no buffer space available","time":1745735834,"message":"failed to send message"}
+{"level":"error","error":"zmq4: read/write on closed connection","time":1745735834,"message":"failed to send message"}
+```
+
+### Jupyter Server Crash
+
+* Jupyter Server tends to crash at lower request throughput due to:
+  1. Message queues filling up faster because execute_reply messages are not consumed quickly enough from the ZeroMQ queues.
+  2. Tornado coroutines running on a single core, combined with Python's limited scalability, result in websocket connection failures between the client and the server.
+  3. Resource contention between Tornado, ZeroMQ, and the Jupyter kernels, competing for CPU and RAM.
+  3. Garbage collection (GC) further degrading performance under load.
+
+
+* At 64 kernels, 10RPS per kernel, JupyterLab stops to loose kernel connection and at 100 kernels, 10 RPS per kernel it looses all kernel connections.
 ```
 [W 2025-04-26 22:48:39.098 ServerApp] Write error on <socket.socket fd=637, family=AddressFamily.AF_INET6, type=SocketKind.SOCK_STREAM, proto=0, laddr=('::1', 8888, 0, 0), raddr=('::1', 57168, 0, 0)>: [Errno 55] No buffer space available
 [W 2025-04-26 22:48:39.099 ServerApp] Write error on <socket.socket fd=161, family=AddressFamily.AF_INET6, type=SocketKind.SOCK_STREAM, proto=0, laddr=('::1', 8888, 0, 0), raddr=('::1', 56615, 0, 0)>: [Errno 55] No buffer space available
@@ -322,16 +341,6 @@ Traceback (most recent call last):
 tornado.websocket.WebSocketClosedError
 ```
 
-**At (64 kernels, 100RPS per kernel) What goes wrong with zasper**
-
-```
-{"level":"info","time":1745735833,"message":"Error writing message: write tcp [::1]:8048->[::1]:51161: write: no buffer space available"}
-{"level":"info","time":1745735834,"message":"Error writing message: write tcp [::1]:8048->[::1]:50991: write: no buffer space available"}
-{"level":"error","error":"writev tcp 127.0.0.1:51485->127.0.0.1:5679: writev: no buffer space available","time":1745735834,"message":"failed to send message"}
-{"level":"error","error":"writev tcp 127.0.0.1:51136->127.0.0.1:5647: writev: no buffer space available","time":1745735834,"message":"failed to send message"}
-{"level":"error","error":"writev tcp 127.0.0.1:51024->127.0.0.1:5230: writev: no buffer space available","time":1745735834,"message":"failed to send message"}
-{"level":"error","error":"zmq4: read/write on closed connection","time":1745735834,"message":"failed to send message"}
-```
 
 ### Key observations:
 
@@ -351,7 +360,7 @@ In Jupyter Server, submitting a request to the ZeroMQ channels involves packagin
 
 While Python’s asyncio and Go’s goroutines share similar architectural goals, Go's model is much closer to the hardware. It schedules coroutines across multiple CPU threads seamlessly, while Python is limited by the **Global Interpreter Lock (GIL)**, preventing true multi-core parallelism.
 
-When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained reource, the situation gets even bad because of JupyterLab, Zeromq and Jupyter kernel all compete for resources, leading to crashes.
+When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained reource, the situation gets even bad because of JupyterLab, Zeromq and Jupyter kernel all compete for resources, leading to Jupyter server websocket connections getting lost.
 
 Zasper also crashes but under extremely high loads when Zeromq kernels fill up as Jupyter kernels get overwhelmed. Zasper has much higher resiliency.
 
@@ -380,6 +389,10 @@ Zasper would not exist without the incredible work of the Jupyter community. Zas
 # 🤞 Support Zasper
 
 If you like Zasper and want to support me in my mission, please consider [sponsoring me on GitHub](https://github.com/sponsors/prasunanand).
+
+# Discussions
+
+Please feel free to mail me on `prasun@zasper.io` to report any corrections or irregularities.
 
 
 # Copyright
