@@ -1,12 +1,12 @@
 # Benchmarking Zasper v/s Jupyter Server
 
-![](/assets/banner.png)
+[![](/assets/banner.png)](https://github.com/zasper-io/zasper)
 
 Zasper is an IDE designed from the ground up to support massive concurrency. It provides a minimal memory footprint, exceptional speed, and the ability to handle numerous concurrent connections.
 
 It's perfectly suited for running REPL-style data applications, with Jupyter notebooks being one example.
 
-[Project](https://github.com/zasper-io/zasper)
+[Project Link](https://github.com/zasper-io/zasper)
 
 ![](/assets/summary_resources.png)
 
