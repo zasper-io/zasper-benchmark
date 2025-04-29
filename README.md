@@ -13,7 +13,7 @@ It's perfectly suited for running REPL-style data applications, with Jupyter not
 How is Zasper better than JupyterLab ?
 
 * Upto 5X Lesser CPU usage 
-* Upto 300X Lesser RAM 
+* Upto 40X Lesser RAM 
 * Higher throughput
 * Lower latency
 * Highly resilient under very high loads
