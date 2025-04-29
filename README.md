@@ -322,7 +322,7 @@ Traceback (most recent call last):
 tornado.websocket.WebSocketClosedError
 ```
 
-** At (64 kernels, 100RPS per kernel) What goes wrong with zasper **
+**At (64 kernels, 100RPS per kernel) What goes wrong with zasper**
 
 ```
 {"level":"info","time":1745735833,"message":"Error writing message: write tcp [::1]:8048->[::1]:51161: write: no buffer space available"}
@@ -351,9 +351,7 @@ In Jupyter Server, submitting a request to the ZeroMQ channels involves packagin
 
 While Python’s asyncio and Go’s goroutines share similar architectural goals, Go's model is much closer to the hardware. It schedules coroutines across multiple CPU threads seamlessly, while Python is limited by the **Global Interpreter Lock (GIL)**, preventing true multi-core parallelism.
 
-When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance.
-
-Under high loads and constrained reource, the situation gets even bad because of JupyterLab, Zeromq and Jupyter kernel all compete for resources, leading to crashes.
+When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained reource, the situation gets even bad because of JupyterLab, Zeromq and Jupyter kernel all compete for resources, leading to crashes.
 
 Zasper also crashes but under extremely high loads when Zeromq kernels fill up as Jupyter kernels get overwhelmed. Zasper has much higher resiliency.
 
