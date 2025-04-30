@@ -12,8 +12,8 @@ It's perfectly suited for running REPL-style data applications, with Jupyter not
 
 How is Zasper better than JupyterLab ?
 
-* Upto 5X Lesser CPU usage 
-* Upto 40X Lesser RAM 
+* Up to 5X Lesser CPU usage
+* Up to 40X Lesser RAM usage
 * Higher throughput
 * Lower latency
 * Highly resilient under very high loads
@@ -82,7 +82,7 @@ System metrics such as CPU usage, memory consumption, and execution throughput a
 ```
 git clone https://github.com/zasper-io/zasper-benchmark
 cd zasper-benchmark
-# Install go dependencides
+# Install go dependencies
 go mod tidy
 # Install Python dependencies
 pip install -r requirements.txt
@@ -97,11 +97,11 @@ TARGET=jupyter
 PID=17656
 ```
 
-`DELAY` is the time duration between two subsequent message requests to a kernel. 
+`DELAY` is the time duration between two subsequent message requests to a kernel.
 
 `NUM_KERNELS` : Number of kernel connections you want to create.
 
-`TARGET`: Define whether you are measuring the performace of jupyter or zasper.
+`TARGET`: Define whether you are measuring the performance of jupyter or zasper.
 
 `PID`: the process id of `jupyterlab` or `zasper` once you start the process.
 
@@ -174,7 +174,7 @@ python3 visualize_resources_summary.py --delay=10
 * CPU : Apple M4, 10-core CPU
 * RAM: 16GB
 
-Note: A typical IPython kernel consumes around 80 MB of RAM on avaerage.
+Note: A typical IPython kernel consumes around 80 MB of RAM on average.
 
 ![](/assets/idle_ram.png)
 
@@ -186,12 +186,36 @@ On an M3 Macbook Air which has just 8GB RAM, the leftover RAM tends to be around
 
 Hence, if you want to run the benchmarks make sure that you have enough RAM for the kernels, else you might end up with results that won't make sense.
 
+### What is RPS per Kernel?
+
+**RPS per kernel** stands for **Requests Per Second per kernel**. It refers to the number of execution requests sent to a single kernel every second. This metric is used to measure the load or stress applied to the system during benchmarking.
+
+For example:
+- If the **RPS per kernel** is **10**, it means each kernel is receiving 10 execution requests per second.
+- If there are **64 kernels** and the RPS per kernel is **10**, the total number of requests being sent across all kernels is **64 × 10 = 640 requests per second**.
+
+#### Relationship Between Delay and RPS
+The **delay** between two execution requests determines the RPS. The formula is:
+
+```
+RPS = 1000 / delay (in milliseconds)
+```
+
+For example:
+- If the delay between two execution requests is **10ms**, the RPS would be:
+  ```
+  RPS = 1000 / 10 = 100
+  ```
+  This means each kernel would receive **100 requests per second**.
+
+This relationship is crucial for understanding how the system behaves under different loads and how delay impacts the throughput.
+
 # Results
 
 The graph shows a clear performance difference between Zasper and Jupyter Server across the selected metrics.
 
-* Lower CPU uasage and RAM usage is better.
-* Higher Message sent and  Message receievd is better
+* Lower CPU usage and RAM usage is better.
+* Higher Message sent and  Message received is better
 * Higher Message sent per second (throughput) and Message received per second (throughput)  is better.
 
 ### 2 kernels | 10 RPS per kernel
@@ -276,10 +300,10 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 
 ### Observations
 
-* Zasper consumer lesser CPU and lesser Memory in all cases.
-* For (64 kernels at 10RPS) and (16kernel at 100RPS), Jupyter server starts loosing kernel connections.
+* Zasper consumes lesser CPU and lesser Memory in all cases.
+* For (64 kernels at 10RPS) and (16kernel at 100RPS), Jupyter server starts losing kernel connections.
 * For (100kernels at 10RPS) Jupyter server loose all kernel connections. Message received throughput falls to 0. Zeromq message queues get overloaded
-* For (64 kernels at 100RPS) both Zasper and Jupyter server loose all kernel connections. At this python the Jupyter kernels get overwhelmed and zeromq message queues get overloaded.
+* For (64 kernels at 100RPS) both Zasper and Jupyter server loose all kernel connections. At this point, the Jupyter kernels get overwhelmed and zeromq message queues get overloaded.
 
 ## Explaining the crash
 
@@ -289,7 +313,7 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 *  Zasper crashed under very high loads compared to Jupyter Server.
 * At 32 kernels, 100 RPS per kernel, the through drops but kernel connections are not lost.
 * At (64 kernels, 100RPS per kernel), the zeromq message queue fills up
-as the **Jupyter kernel** doesnt consume the messages fast and the queue fills up completely, leading to lost kernel connections.
+as the **Jupyter kernel** doesn't consume the messages fast and the queue fills up completely, leading to lost kernel connections.
 
 ```
 {"level":"info","time":1745735833,"message":"Error writing message: write tcp [::1]:8048->[::1]:51161: write: no buffer space available"}
@@ -344,7 +368,7 @@ tornado.websocket.WebSocketClosedError
 
 ### Key observations:
 
-* CPU Usage: Zasper maintained consistently lower CPU usage during heavy load.
+* CPU Usage: Zasper maintained consistently lower CPU usage.
 * RAM Usage: Memory consumption was significantly lower for Zasper.
 * Throughput: Zasper handled more execution requests per unit of time, indicating better scalability under concurrent workloads.
 * Latency: Under extremely high load, the latency drops for both JupyterLab and Zasper. However Zasper has much lower latency compared to Jupyter Server.
@@ -360,7 +384,7 @@ In Jupyter Server, submitting a request to the ZeroMQ channels involves packagin
 
 While Python’s asyncio and Go’s goroutines share similar architectural goals, Go's model is much closer to the hardware. It schedules coroutines across multiple CPU threads seamlessly, while Python is limited by the **Global Interpreter Lock (GIL)**, preventing true multi-core parallelism.
 
-When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained reource, the situation gets even bad because of JupyterLab, Zeromq and Jupyter kernel all compete for resources, leading to Jupyter server websocket connections getting lost.
+When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained resource, the situation gets even worse as Jupyter Server, Zeromq and Jupyter kernel all compete for resources, leading to Jupyter server websocket connections getting lost.
 
 Zasper also crashes but under extremely high loads when Zeromq kernels fill up as Jupyter kernels get overwhelmed. Zasper has much higher resiliency.
 
