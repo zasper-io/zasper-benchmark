@@ -8,11 +8,13 @@ os.makedirs("plots", exist_ok=True)
 
 parser = argparse.ArgumentParser(description="Generate visualizations for Zasper and Jupyter.")
 parser.add_argument("--n", type=int, required=True, help="Number of kernels")
-parser.add_argument("--delay", type=str, required=True, help="delay between requests")
+parser.add_argument("--delay", type=int, required=True, help="delay between requests")
 
 args = parser.parse_args()
 n = args.n
 delay = args.delay
+
+rps = int(1000/delay)
 
 # File names depend on n
 zasper_file = f"data/{delay}ms/benchmark_results_zasper_{n}kernels.json"
@@ -70,7 +72,7 @@ ax1.plot(zasper_time, zasper_cpu_usage, label="Zasper CPU Usage", color='#583BD8
 ax1.plot(jupyter_time, jupyter_cpu_usage, label="Jupyter Server CPU Usage", color='#E46E2E', marker='s')
 ax1.set_xlabel('Time (seconds since start)')
 ax1.set_ylabel('CPU Usage (%)')
-ax1.set_title(f'CPU Usage Comparison: Zasper vs Jupyter Server | {n} kernels | 10 RPS per kernel')
+ax1.set_title(f'CPU Usage Comparison: Zasper vs Jupyter Server | {n} kernels | {rps} RPS per kernel')
 ax1.legend()
 ax1.grid(True)
 add_note(ax1, "Lower CPU usage is better", position='center right')
@@ -80,7 +82,7 @@ ax2.plot(zasper_time, zasper_memory_usage, label="Zasper Memory Usage (MB)", col
 ax2.plot(jupyter_time, jupyter_memory_usage, label="Jupyter Server Memory Usage (MB)", color='#E46E2E', marker='s')
 ax2.set_xlabel('Time (seconds since start)')
 ax2.set_ylabel('Memory Usage (MB)')
-ax2.set_title(f'Memory Usage Comparison: Zasper vs Jupyter Server | {n} kernels | 10 RPS per kernel')
+ax2.set_title(f'Memory Usage Comparison: Zasper vs Jupyter Server | {n} kernels | {rps} RPS per kernel')
 ax2.legend()
 ax2.grid(True)
 add_note(ax2, "Lower RAM usage is better", position='center right')
@@ -91,7 +93,7 @@ ax3.plot(zasper_time, zasper_messages_sent_count, label="Zasper Message Sent Cou
 ax3.plot(jupyter_time, jupyter_messages_sent_count, label="Jupyter Server Message Sent Count", color='#E46E2E', marker='s')
 ax3.set_xlabel('Time (seconds since start)')
 ax3.set_ylabel('Messages Sent')
-ax3.set_title(f'Messages Sent Comparison: Zasper vs Jupyter Server | {n} kernels | 10 RPS per kernel')
+ax3.set_title(f'Messages Sent Comparison: Zasper vs Jupyter Server | {n} kernels | {rps} RPS per kernel')
 ax3.legend()
 ax3.grid(True)
 add_note(ax3, "Higher message sent count is better", position='center left')
@@ -101,7 +103,7 @@ ax4.plot(zasper_time, zasper_messages_received_count, label="Zasper Message Rece
 ax4.plot(jupyter_time, jupyter_messages_received_count, label="Jupyter Server Message Receieved Count", color='#E46E2E', marker='s')
 ax4.set_xlabel('Time (seconds since start)')
 ax4.set_ylabel('Messages Received')
-ax4.set_title(f'Messages Received Comparison: Zasper vs Jupyter Server | {n} kernels | 10 RPS per kernel')
+ax4.set_title(f'Messages Received Comparison: Zasper vs Jupyter Server | {n} kernels | {rps} RPS per kernel')
 ax4.legend()
 ax4.grid(True)
 add_note(ax4, "Higher message received count is better", position='center left')
@@ -112,7 +114,7 @@ ax5.plot(zasper_time, zasper_message_sent_throughput, label="Zasper Message Sent
 ax5.plot(jupyter_time, jupyter_message_sent_throughput, label="Jupyter Server Message Sent Throughput", color='#E46E2E', marker='s')
 ax5.set_xlabel('Time (seconds since start)')
 ax5.set_ylabel('Messages Sent/second')
-ax5.set_title(f'Message Sent Throughput Comparison: Zasper vs Jupyter Server | {n} kernels | 10 RPS per kernel')
+ax5.set_title(f'Message Sent Throughput Comparison: Zasper vs Jupyter Server | {n} kernels | {rps} RPS per kernel')
 ax5.legend()
 ax5.grid(True)
 add_note(ax5, "Higher message sent \n throughput is better", position='upper left')
@@ -122,7 +124,7 @@ ax6.plot(zasper_time, zasper_message_received_throughput, label="Zasper Message 
 ax6.plot(jupyter_time, jupyter_message_received_throughput, label="Jupyter Server Message Receieved Throughput", color='#E46E2E', marker='s')
 ax6.set_xlabel('Time (seconds since start)')
 ax6.set_ylabel('Messages Sent/second')
-ax6.set_title(f'Message Receieved Throughput Comparison: Zasper vs Jupyter Server | {n} kernels | 10 RPS per kernel')
+ax6.set_title(f'Message Receieved Throughput Comparison: Zasper vs Jupyter Server | {n} kernels | {rps} RPS per kernel')
 ax6.legend()
 ax6.grid(True)
 add_note(ax6, "Higher message received \n throughput is better", position='upper left')
@@ -141,4 +143,3 @@ plt.tight_layout(rect=[0, 0.05, 1, 1])
 
 plt.savefig(f"plots/{delay}ms/benchmark_result_{n}kernels.png")
 # plt.show()
-

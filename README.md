@@ -192,9 +192,23 @@ Hence, if you want to run the benchmarks make sure that you have enough RAM for 
 
 **RPS per kernel** stands for **Requests Per Second per kernel**. It refers to the number of execution requests sent to a single kernel every second. This metric is used to measure the load or stress applied to the system during benchmarking.
 
+```
+Message Sent Throughput = num_of_kernels * RPS per kernel
+```
+
+For every `execute_request` sent to the kernel, the kernel replies with 5 messages.
+
+![](/assets/request_reply.png)
+
+```
+Message Received Throughput = 5 * Message Sent Throughput
+```
+
 For example:
 - If the **RPS per kernel** is **10**, it means each kernel is receiving 10 execution requests per second.
-- If there are **64 kernels** and the RPS per kernel is **10**, the total number of requests being sent across all kernels is **64 × 10 = 640 requests per second**.
+- If there are **64 kernels** and the RPS per kernel is **10**, the total number of requests being sent across all kernels is **64 × 10 = 640 requests(or messages) per second**.
+- Message sent throughput = 640 messages per second
+- Message received throughput = 640*5 = 3200 messages per second
 
 #### Relationship Between Delay and RPS
 The **delay** between two execution requests determines the RPS. The formula is:
