@@ -20,7 +20,7 @@ Note: Jupyter Server powers Jupyterlab. Hence, I use the terms interchangeably.
 
 Zasper is an IDE designed from the ground up to support massive concurrency. It provides a minimal memory footprint, exceptional speed, and the ability to handle numerous concurrent connections.
 
-It's perfectly suited for running REPL-style data applications, with Jupyter notebooks being one example.
+It implements [Jupyter's wire protocol](https://jupyter-client.readthedocs.io/en/latest/messaging.html) and can efficiently run Jupyter Notebooks.
 
 [Project Link](https://github.com/zasper-io/zasper)
 
@@ -207,8 +207,8 @@ Message Received Throughput = 5 * Message Sent Throughput
 For example:
 - If the **RPS per kernel** is **10**, it means each kernel is receiving 10 execution requests per second.
 - If there are **64 kernels** and the RPS per kernel is **10**, the total number of requests being sent across all kernels is **64 × 10 = 640 requests(or messages) per second**.
-- Message sent throughput = 640 messages per second
-- Message received throughput = 640*5 = 3200 messages per second
+- Message sent throughput = **640 messages per second**
+- Message received throughput = **640*5 = 3200 messages per second**
 
 #### Relationship Between Delay and RPS
 The **delay** between two execution requests determines the RPS. The formula is:
