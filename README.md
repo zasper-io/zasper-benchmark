@@ -10,8 +10,8 @@
 * **Resource Efficiency**:
   - CPU: Zasper uses up to 5X less CPU resources
   - RAM: Zasper uses up to 40X less memory
-* **Scalability**: Zasper maintained performance with 64 kernels at 10 RPS, while Jupyter Server began failing at this load
-* **Resilience**: Zasper only failed under extremely high loads (64 kernels at 100 RPS)
+* **Scalability**: Zasper maintained performance with 64 kernels at 10 RPS per kernel, while Jupyter Server began failing at this load
+* **Resilience**: Zasper only failed under extremely high loads (64 kernels at 100 RPS per kernel)
 * **Recovery**: Zasper recovers more gracefully from overload conditions
 
 Note: Jupyter Server powers Jupyterlab. Hence, I use the terms interchangeably.
