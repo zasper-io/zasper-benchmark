@@ -14,7 +14,7 @@
 * **Resilience**: Zasper only failed under extremely high loads (64 kernels at 100 RPS)
 * **Recovery**: Zasper recovers more gracefully from overload conditions
 
-Note: Jupyter Server powers Jupyterlab. Hence, I use the term interchangeably.
+Note: Jupyter Server powers Jupyterlab. Hence, I use the terms interchangeably.
 
 # Introduction
 
