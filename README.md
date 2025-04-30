@@ -2,25 +2,27 @@
 
 [![](/assets/banner.png)](https://github.com/zasper-io/zasper)
 
+## Key Findings at a Glance
+
+![](/assets/summary_resources.png)
+
+* **Performance Gap**: Zasper consistently outperforms Jupyter Server across all tested metrics
+* **Resource Efficiency**:
+  - CPU: Zasper uses up to 5X less CPU resources
+  - RAM: Zasper uses up to 40X less memory
+* **Scalability**: Zasper maintained performance with 64 kernels at 10 RPS, while Jupyter Server began failing at this load
+* **Resilience**: Zasper only failed under extremely high loads (64 kernels at 100 RPS)
+* **Recovery**: Zasper recovers more gracefully from overload conditions
+
+Note: Jupyter Server powers Jupyterlab. Hence, I use the term interchangeably.
+
+# Introduction
+
 Zasper is an IDE designed from the ground up to support massive concurrency. It provides a minimal memory footprint, exceptional speed, and the ability to handle numerous concurrent connections.
 
 It's perfectly suited for running REPL-style data applications, with Jupyter notebooks being one example.
 
 [Project Link](https://github.com/zasper-io/zasper)
-
-![](/assets/summary_resources.png)
-
-How is Zasper better than JupyterLab ?
-
-* Up to 5X Lesser CPU usage
-* Up to 40X Lesser RAM usage
-* Higher throughput
-* Lower latency
-* Highly resilient under very high loads
-
-Note: Jupyter Server powers Jupyterlab. Hence, I use the term interchangeably.
-
-# Introduction
 
 The primary goal of this benchmarking exercise is to compare the performance of Zasper against the traditional Jupyter Server. The focus areas for evaluation are:
 
