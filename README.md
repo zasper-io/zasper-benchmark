@@ -60,7 +60,7 @@ The Jupyter kernel communicates with the server over five dedicated channels:
 * IOPub channel – used to receive outputs from the kernel (e.g., `4`, `Hello World!`)
 
 ### 3. Communication via WebSocket
-A WebSocket is established between the Jupyter client and the server, allowing real-time, bi-directional communication. The client send the messages over the websocket. When the jupyter_server receives this message it puts this message on a `shell channel` over zeromq. This message when received by the kernel  triggers a computation in the kernel. The kernel emits the output on `iopub channel` over zeromq. This message is received by Jupyter server and the output is put on websocket.
+A WebSocket is established between the Jupyter client and the server, allowing real-time, bi-directional communication. The client send the messages over the websocket. When the jupyter_server receives this message it puts this message on a `shell channel` over ZeroMQ. This message when received by the kernel  triggers a computation in the kernel. The kernel emits the output on `iopub channel` over ZeroMQ. This message is received by Jupyter server and the output is put on websocket.
 
 ![](/assets/kernel_communication.svg)
 
@@ -294,7 +294,7 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 
 **The messages received throughput for  both Zasper and Jupyter Server falls to 0.**
 
-**At this point IPython kernels get overwhelmed and zeromq queues are completely full**
+**At this point IPython kernels get overwhelmed and ZeroMQ queues are completely full**
 
 ### Resource Usage summary | 100 RPS per kernel
 ![](/plots/10ms/summary_resources.png)
@@ -304,8 +304,8 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 
 * Zasper consumes lesser CPU and lesser Memory in all cases.
 * For (64 kernels at 10RPS) and (16kernel at 100RPS), Jupyter server starts losing kernel connections.
-* For (100kernels at 10RPS) Jupyter server loose all kernel connections. Message received throughput falls to 0. Zeromq message queues get overloaded
-* For (64 kernels at 100RPS) both Zasper and Jupyter server loose all kernel connections. At this point, the Jupyter kernels get overwhelmed and zeromq message queues get overloaded.
+* For (100kernels at 10RPS) Jupyter server loose all kernel connections. Message received throughput falls to 0. ZeroMQ message queues get overloaded
+* For (64 kernels at 100RPS) both Zasper and Jupyter server loose all kernel connections. At this point, the Jupyter kernels get overwhelmed and ZeroMQ message queues get overloaded.
 
 ## Explaining the crash
 
@@ -314,7 +314,7 @@ The graph shows a clear performance difference between Zasper and Jupyter Server
 
 *  Zasper crashed under very high loads compared to Jupyter Server.
 * At 32 kernels, 100 RPS per kernel, the through drops but kernel connections are not lost.
-* At (64 kernels, 100RPS per kernel), the zeromq message queue fills up
+* At (64 kernels, 100RPS per kernel), the ZeroMQ message queue fills up
 as the **Jupyter kernel** doesn't consume the messages fast and the queue fills up completely, leading to lost kernel connections.
 
 ```
@@ -386,9 +386,9 @@ In Jupyter Server, submitting a request to the ZeroMQ channels involves packagin
 
 While Python’s asyncio and Go’s goroutines share similar architectural goals, Go's model is much closer to the hardware. It schedules coroutines across multiple CPU threads seamlessly, while Python is limited by the **Global Interpreter Lock (GIL)**, preventing true multi-core parallelism.
 
-When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained resource, the situation gets even worse as Jupyter Server, Zeromq and Jupyter kernel all compete for resources, leading to Jupyter server websocket connections getting lost.
+When request handling slows down in Jupyter Server, memory usage climbs, CPU gets overwhelmed, and the garbage collector (GC) starts to intervene—often resulting in degraded performance. Under high loads and constrained resource, the situation gets even worse as Jupyter Server, ZeroMQ and Jupyter Kernel all compete for resources, leading to Jupyter Server's websocket connections getting lost.
 
-Zasper also crashes but under extremely high loads when Zeromq kernels fill up as Jupyter kernels get overwhelmed. Zasper has much higher resiliency.
+Zasper also crashes but under extremely high loads when ZeroMQ kernels fill up as Jupyter kernels get overwhelmed. Zasper has much higher resiliency.
 
 Zasper is designed around the principle of **“Use More to Save More.”** As request volume increases, Zasper’s efficiency becomes more apparent. Its architecture thrives under load, delivering better throughput and stability at scale.
 
@@ -418,7 +418,7 @@ If you like Zasper and want to support me in my mission, please consider [sponso
 
 # Discussions
 
-Please feel free to mail me on `prasun@zasper.io` to report any corrections or irregularities.
+Please feel free to mail me at `prasun@zasper.io` to report any corrections or irregularities.
 
 
 # Copyright
