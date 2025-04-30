@@ -47,6 +47,7 @@ This session launches a kernel, which handles code execution.
 
 
 ### 2. Kernel Channels
+
 The Jupyter kernel communicates with the server over five dedicated channels:
 * stdin – for user inputs.
 * shell – for sending execution requests.
@@ -60,7 +61,7 @@ The Jupyter kernel communicates with the server over five dedicated channels:
 * IOPub channel – used to receive outputs from the kernel (e.g., `4`, `Hello World!`)
 
 ### 3. Communication via WebSocket
-A WebSocket is established between the Jupyter client and the server, allowing real-time, bi-directional communication. The client send the messages over the websocket. When the jupyter_server receives this message it puts this message on a `shell channel` over ZeroMQ. This message when received by the kernel  triggers a computation in the kernel. The kernel emits the output on `iopub channel` over ZeroMQ. This message is received by Jupyter server and the output is put on websocket.
+A WebSocket is established between the user's browser and the server, allowing real-time, bi-directional communication. The client send the messages over the websocket. When the jupyter_server receives this message it puts this message on a `shell channel` over ZeroMQ. This message when received by the kernel  triggers a computation in the kernel. The kernel emits the output on `iopub channel` over ZeroMQ. This message is received by Jupyter server and the output is put on websocket.
 
 ![](/assets/kernel_communication.svg)
 
