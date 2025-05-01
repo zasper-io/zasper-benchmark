@@ -1,4 +1,4 @@
-# Benchmarking Zasper v/s Jupyter Server
+# Benchmarking Zasper v/s JupyterLab
 
 [![](/assets/banner.png)](https://github.com/zasper-io/zasper)
 
